@@ -1,0 +1,111 @@
+<?php
+include 'header.php';
+date_default_timezone_set('Asia/Kolkata');
+$currentDateTime = date('Y-m-d H:i:s');
+
+$bank_name = $_GET['bank_name'] ?? '';
+$month     = $_GET['month'] ?? '';
+?>
+
+<div class="page-wrapper">
+  <div class="page-content">
+                              <div class="card">
+                               <div class="card-body">
+                                 <form action= "action.php" class="row g-3"  method="get" enctype="multipart/form-data">
+                                   <div class="col-md-6">
+                                    <label for="inputFirstName" class="form-label">Bank Name</label>
+                                      <select class="form-control" id="inputFirstName" name="bank_name" required>
+                                        <option value="">--Select--</option>
+                                           <?php 
+                                               $sql1 = "SELECT * FROM society_info  ORDER BY id DESC";
+                                               $result1 = mysqli_query($link, $sql1);
+                                               if ($result1->num_rows > 0) {
+                                                   while ($usr1 = mysqli_fetch_array($result1)) {
+                                                       echo "<option value='{$usr1['id']}'>{$usr1['society_name']}</option>";
+                                                   }
+                                               }
+                                           ?>
+                                     </select>     
+                                  </div>
+                                  <div class="col-md-6">
+                                    <label for="inputFirstName" class="form-label">Year</label>
+                                    <input type="month" name="month" class="form-control" required>
+                                     
+                                  </div>
+                                
+                                 
+                                  <div class="col-12" align="center">
+                                    <button type="submit" class="btn btn-outline-primary px-5">calibration</button>
+                                  </div>
+                                </form>
+                        </div>
+                      </div>    
+      <div class="card">
+         <div class="card-body">
+            <div class="table-responsive">
+               <table id="example2" class="table table-striped table-bordered">
+                   <thead>
+                      <th>Sr. No</th>
+                      <th>Bank Name</th>
+                      <th>Month & Year</th>
+                      <th>Self Fund</th>
+                      <th>Real State & Movable Property</th>
+                      <th>Investment in Shares</th>
+                      <th>Reserve Fund</th>   
+                     <th>Net Worth</th>
+                      <th>Total Debts</th>
+                      <th>  Total Deposits</th>
+                      <th>CD Ratio</th>
+                      <th>Average CD Ratio</th>                   
+                      <th>Date</th>
+                   </thead>
+                 <tbody>
+
+                   <?php
+            $sql = "SELECT * FROM cd_ratio ORDER BY id DESC limit 500";
+            $result = mysqli_query($link, $sql);
+            $sr = 1;
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<tr>";
+                echo "<td>" . $sr++ . "</td>"; 
+                ?>
+    <td>
+        <?php 
+        $bname= $row['bank_name'];
+        $sql120 = "SELECT * FROM society_info WHERE id='$bname' ORDER BY id ASC";
+        $result120 = mysqli_query($link, $sql120);
+        while ($row120 = mysqli_fetch_assoc($result120)) {
+            echo $row120['society_name']; 
+        }
+        ?>
+    </td>
+    <?php
+   
+           echo "<td>" . htmlspecialchars($row['month']) . "</td>";
+           echo "<td>" . htmlspecialchars($row['self_fund']) . "</td>";
+echo "<td>" . htmlspecialchars($row['real_state_n_movable_property']) . "</td>";
+echo "<td>" . htmlspecialchars($row['investment_in_shares']) . "</td>";
+echo "<td>" . htmlspecialchars($row['reserve_fund']) . "</td>";
+echo "<td>" . htmlspecialchars($row['net_worth']) . "</td>";
+// echo "<td>" . htmlspecialchars($row['self_fund']) . "</td>"; // moved here
+echo "<td>" . htmlspecialchars($row['total_debt']) . "</td>";
+echo "<td>" . htmlspecialchars($row['total_deposits']) . "</td>";
+echo "<td>" . htmlspecialchars($row['cd_ratio']) . "</td>";
+echo "<td>" . htmlspecialchars($row['avg_cd_ratio']) . "</td>";
+echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
+      }
+            ?>
+                 </tbody>
+
+               </table>
+            </div>
+         </div>
+      </div>
+    
+    
+    
+  </div>
+</div>
+
+
+<?php include('footer.php'); ?>

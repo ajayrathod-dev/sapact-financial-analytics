@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balance Sheet Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .mandatory-row {
+            background-color: #e6f3ff;
+            font-weight: bold;
+        }
+        .subcategory-row {
+            background-color: #f8f9fa;
+        }
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        .add-btn, .remove-btn {
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Balance Sheet Form</h2>
+        <form action="submit_balance_sheet.php" method="POST">
+            <div class="mb-3">
+                <label for="submission_date" class="form-label">Balance Sheet as on Date</label>
+                <input type="date" class="form-control" id="submission_date" name="submission_date" required>
+            </div>
+
+            <!-- Liabilities Section -->
+            <h3>Liabilities</h3>
+            <div id="liabilities" class="form-section">
+                <!-- Authorised Share Capital -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">Authorised Share Capital</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="liabilities[Authorised Share Capital][amount]" required>
+                    </div>
+                </div>
+
+                <!-- Share Capital -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">SHARE CAPITAL</label>
+                    </div>
+                </div>
+                <div id="share-capital-subcategories">
+                    <div class="row subcategory-row mb-2">
+                        <div class="col-4">
+                            <input type="text" class="form-control" name="liabilities[SHARE CAPITAL][subcategories][][name]" placeholder="Subcategory (e.g., Paid up Share Capital)" required>
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="liabilities[SHARE CAPITAL][subcategories][][no_of_accounts]" placeholder="No of A/C">
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="liabilities[SHARE CAPITAL][subcategories][][amount]" placeholder="Amount (Rs)">
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger remove-btn">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary add-btn" onclick="addSubcategory('share-capital-subcategories', 'SHARE CAPITAL', 'liabilities')">Add Subcategory</button>
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">SHARE CAPITAL Total</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="liabilities[SHARE CAPITAL Total][amount]" required readonly>
+                    </div>
+                </div>
+
+                <!-- Funds and Reserves -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">FUNDS AND RESERVES</label>
+                    </div>
+                </div>
+                <div id="funds-reserves-subcategories">
+                    <div class="row subcategory-row mb-2">
+                        <div class="col-4">
+                            <input type="text" class="form-control" name="liabilities[FUNDS AND RESERVES][subcategories][][name]" placeholder="Subcategory (e.g., RESERVE FUND)" required>
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="liabilities[FUNDS AND RESERVES][subcategories][][no_of_accounts]" placeholder="No of A/C">
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="liabilities[FUNDS AND RESERVES][subcategories][][amount]" placeholder="Amount (Rs)">
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger remove-btn">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary add-btn" onclick="addSubcategory('funds-reserves-subcategories', 'FUNDS AND RESERVES', 'liabilities')">Add Subcategory</button>
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">FUNDS AND RESERVES Total</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="liabilities[FUNDS AND RESERVES Total][amount]" required readonly>
+                    </div>
+                </div>
+
+                <!-- Deposits -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">DEPOSITS</label>
+                    </div>
+                </div>
+                <div id="deposits-subcategories">
+                    <div class="row subcategory-row mb-2">
+                        <div class="col-4">
+                            <input type="text" class="form-control" name="liabilities[DEPOSITS][subcategories][][name]" placeholder="Subcategory (e.g., Savings Deposit)" required>
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="liabilities[DEPOSITS][subcategories][][no_of_accounts]" placeholder="No of A/C">
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="liabilities[DEPOSITS][subcategories][][amount]" placeholder="Amount (Rs)">
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger remove-btn">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary add-btn" onclick="addSubcategory('deposits-subcategories', 'DEPOSITS', 'liabilities')">Add Subcategory</button>
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">DEPOSITS Total</label>
+                    </div>
+                    <div class="col-2">
+                        <input type="number" class="form-control" name="liabilities[DEPOSITS Total][no_of_accounts]" required readonly>
+                    </div>
+                    <div class="col-2">
+                        <input type="number" class="form-control" name="liabilities[DEPOSITS Total][amount]" required readonly>
+                    </div>
+                </div>
+
+                <!-- Borrowings -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">BORROWINGS</label>
+                    </div>
+                </div>
+                <div id="borrowings-subcategories">
+                    <div class="row subcategory-row mb-2">
+                        <div class="col-4">
+                            <input type="text" class="form-control" name="liabilities[BORROWINGS][subcategories][][name]" placeholder="Subcategory (e.g., PDCC Bank OD)" required>
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="liabilities[BORROWINGS][subcategories][][no_of_accounts]" placeholder="No of A/C">
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="liabilities[BORROWINGS][subcategories][][amount]" placeholder="Amount (Rs)">
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger remove-btn">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary add-btn" onclick="addSubcategory('borrowings-subcategories', 'BORROWINGS', 'liabilities')">Add Subcategory</button>
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">BORROWINGS Total</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="liabilities[BORROWINGS Total][amount]" required readonly>
+                    </div>
+                </div>
+
+                <!-- Other Liabilities -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">OTHER LIABILITIES</label>
+                    </div>
+                </div>
+                <div id="other-liabilities-subcategories">
+                    <div class="row subcategory-row mb-2">
+                        <div class="col-4">
+                            <input type="text" class="form-control" name="liabilities[OTHER LIABILITIES][subcategories][][name]" placeholder="Subcategory (e.g., INT.PAYABLE FOR DEPOSIT)" required>
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="liabilities[OTHER LIABILITIES][subcategories][][no_of_accounts]" placeholder="No of A/C">
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="liabilities[OTHER LIABILITIES][subcategories][][amount]" placeholder="Amount (Rs)">
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger remove-btn">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary add-btn" onclick="addSubcategory('other-liabilities-subcategories', 'OTHER LIABILITIES', 'liabilities')">Add Subcategory</button>
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">OTHER LIABILITIES Total</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="liabilities[OTHER LIABILITIES Total][amount]" required readonly>
+                    </div>
+                </div>
+
+                <!-- Branch Adjustment -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">BRANCH ADJUSTMENT</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="liabilities[BRANCH ADJUSTMENT][amount]">
+                    </div>
+                </div>
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">BRANCH ADJUSTMENT Total</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="liabilities[BRANCH ADJUSTMENT Total][amount]" readonly>
+                    </div>
+                </div>
+
+                <!-- Profit and Loss -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">PROFIT AND LOSS</label>
+                    </div>
+                </div>
+                <div id="profit-loss-subcategories">
+                    <div class="row subcategory-row mb-2">
+                        <div class="col-4">
+                            <input type="text" class="form-control" name="liabilities[PROFIT AND LOSS][subcategories][][name]" placeholder="Subcategory (e.g., CURRENT YEAR PROFIT)" required>
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="liabilities[PROFIT AND LOSS][subcategories][][no_of_accounts]" placeholder="No of A/C">
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="liabilities[PROFIT AND LOSS][subcategories][][amount]" placeholder="Amount (Rs)">
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger remove-btn">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary add-btn" onclick="addSubcategory('profit-loss-subcategories', 'PROFIT AND LOSS', 'liabilities')">Add Subcategory</button>
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">PROFIT AND LOSS Total</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="liabilities[PROFIT AND LOSS Total][amount]" required readonly>
+                    </div>
+                </div>
+
+                <!-- Working Capital -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">WORKING CAPITAL</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="liabilities[WORKING CAPITAL][amount]" required readonly>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assets Section -->
+            <h3>Assets</h3>
+            <div id="assets" class="form-section">
+                <!-- Cash in Hand -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">CASH IN HAND</label>
+                    </div>
+                </div>
+                <div id="cash-in-hand-subcategories">
+                    <div class="row subcategory-row mb-2">
+                        <div class="col-4">
+                            <input type="text" class="form-control" name="assets[CASH IN HAND][subcategories][][name]" placeholder="Subcategory (e.g., CASH IN HAND)" required>
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="assets[CASH IN HAND][subcategories][][no_of_accounts]" placeholder="No of A/C">
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="assets[CASH IN HAND][subcategories][][amount]" placeholder="Amount (Rs)">
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger remove-btn">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary add-btn" onclick="addSubcategory('cash-in-hand-subcategories', 'CASH IN HAND', 'assets')">Add Subcategory</button>
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">CASH IN HAND Total</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="assets[CASH IN HAND Total][amount]" required readonly>
+                    </div>
+                </div>
+
+                <!-- Cash at Bank -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">CASH AT BANK</label>
+                    </div>
+                </div>
+                <div id="cash-at-bank-subcategories">
+                    <div class="row subcategory-row mb-2">
+                        <div class="col-4">
+                            <input type="text" class="form-control" name="assets[CASH AT BANK][subcategories][][name]" placeholder="Subcategory (e.g., DCC Bank)" required>
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="assets[CASH AT BANK][subcategories][][no_of_accounts]" placeholder="No of A/C">
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="assets[CASH AT BANK][subcategories][][amount]" placeholder="Amount (Rs)">
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger remove-btn">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary add-btn" onclick="addSubcategory('cash-at-bank-subcategories', 'CASH AT BANK', 'assets')">Add Subcategory</button>
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">CASH AT BANK Total</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="assets[CASH AT BANK Total][amount]" required readonly>
+                    </div>
+                </div>
+
+                <!-- Investments -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">INVESTMENTS</label>
+                    </div>
+                </div>
+                <div id="investments-subcategories">
+                    <div class="row subcategory-row mb-2">
+                        <div class="col-4">
+                            <input type="text" class="form-control" name="assets[INVESTMENTS][subcategories][][name]" placeholder="Subcategory (e.g., Shares Investment)" required>
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="assets[INVESTMENTS][subcategories][][no_of_accounts]" placeholder="No of A/C">
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="assets[INVESTMENTS][subcategories][][amount]" placeholder="Amount (Rs)">
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger remove-btn">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary add-btn" onclick="addSubcategory('investments-subcategories', 'INVESTMENTS', 'assets')">Add Subcategory</button>
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">INVESTMENTS Total</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="assets[INVESTMENTS Total][amount]" required readonly>
+                    </div>
+                </div>
+
+                <!-- Loans & Advances -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">LOANS & ADVANCES</label>
+                    </div>
+                </div>
+                <div id="loans-advances-subcategories">
+                    <div class="row subcategory-row mb-2">
+                        <div class="col-4">
+                            <input type="text" class="form-control" name="assets[LOANS & ADVANCES][subcategories][][name]" placeholder="Subcategory (e.g., Secured Loan)" required>
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="assets[LOANS & ADVANCES][subcategories][][no_of_accounts]" placeholder="No of A/C">
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="assets[LOANS & ADVANCES][subcategories][][amount]" placeholder="Amount (Rs)">
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger remove-btn">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary add-btn" onclick="addSubcategory('loans-advances-subcategories', 'LOANS & ADVANCES', 'assets')">Add Subcategory</button>
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">LOANS & ADVANCES Total</label>
+                    </div>
+                    <div class="col-2">
+                        <input type="number" class="form-control" name="assets[LOANS & ADVANCES Total][no_of_accounts]" required readonly>
+                    </div>
+                    <div class="col-2">
+                        <input type="number" class="form-control" name="assets[LOANS & ADVANCES Total][amount]" required readonly>
+                    </div>
+                </div>
+
+                <!-- Interest Receivable -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">INT.RECEIVABLE ON INVESTMENT & ADVANCES</label>
+                    </div>
+                </div>
+                <div id="interest-receivable-subcategories">
+                    <div class="row subcategory-row mb-2">
+                        <div class="col-4">
+                            <input type="text" class="form-control" name="assets[INT.RECEIVABLE ON INVESTMENT & ADVANCES][subcategories][][name]" placeholder="Subcategory (e.g., INTEREST RECEIVABLE ON ADVANCES)" required>
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="assets[INT.RECEIVABLE ON INVESTMENT & ADVANCES][subcategories][][no_of_accounts]" placeholder="No of A/C">
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="assets[INT.RECEIVABLE ON INVESTMENT & ADVANCES][subcategories][][amount]" placeholder="Amount (Rs)">
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger remove-btn">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary add-btn" onclick="addSubcategory('interest-receivable-subcategories', 'INT.RECEIVABLE ON INVESTMENT & ADVANCES', 'assets')">Add Subcategory</button>
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">INT.RECEIVABLE ON INVESTMENT & ADVANCES Total</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="assets[INT.RECEIVABLE ON INVESTMENT & ADVANCES Total][amount]" required readonly>
+                    </div>
+                </div>
+
+                <!-- Branch Adjustment (Assets) -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">BRANCH ADJUSTMENT</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="assets[BRANCH ADJUSTMENT][amount]">
+                    </div>
+                </div>
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">BRANCH ADJUSTMENT Total</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="assets[BRANCH ADJUSTMENT Total][amount]" readonly>
+                    </div>
+                </div>
+
+                <!-- Own Assets -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">OWN ASSETS</label>
+                    </div>
+                </div>
+                <div id="own-assets-subcategories">
+                    <div class="row subcategory-row mb-2">
+                        <div class="col-4">
+                            <input type="text" class="form-control" name="assets[OWN ASSETS][subcategories][][name]" placeholder="Subcategory (e.g., FURNITURE AND FIXTURE)" required>
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="assets[OWN ASSETS][subcategories][][no_of_accounts]" placeholder="No of A/C">
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="assets[OWN ASSETS][subcategories][][amount]" placeholder="Amount (Rs)">
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger remove-btn">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary add-btn" onclick="addSubcategory('own-assets-subcategories', 'OWN ASSETS', 'assets')">Add Subcategory</button>
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">OWN ASSETS Total</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="assets[OWN ASSETS Total][amount]" required readonly>
+                    </div>
+                </div>
+
+                <!-- Other Assets -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">OTHER ASSETS</label>
+                    </div>
+                </div>
+                <div id="other-assets-subcategories">
+                    <div class="row subcategory-row mb-2">
+                        <div class="col-4">
+                            <input type="text" class="form-control" name="assets[OTHER ASSETS][subcategories][][name]" placeholder="Subcategory (e.g., TDS)" required>
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="assets[OTHER ASSETS][subcategories][][no_of_accounts]" placeholder="No of A/C">
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="assets[OTHER ASSETS][subcategories][][amount]" placeholder="Amount (Rs)">
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger remove-btn">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary add-btn" onclick="addSubcategory('other-assets-subcategories', 'OTHER ASSETS', 'assets')">Add Subcategory</button>
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">OTHER ASSETS Total</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="assets[OTHER ASSETS Total][amount]" required readonly>
+                    </div>
+                </div>
+
+                <!-- Loss -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">LOSS</label>
+                    </div>
+                </div>
+                <div id="loss-subcategories">
+                    <div class="row subcategory-row mb-2">
+                        <div class="col-4">
+                            <input type="text" class="form-control" name="assets[LOSS][subcategories][][name]" placeholder="Subcategory (e.g., LAST YEAR)" required>
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="assets[LOSS][subcategories][][no_of_accounts]" placeholder="No of A/C">
+                        </div>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="assets[LOSS][subcategories][][amount]" placeholder="Amount (Rs)">
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger remove-btn">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary add-btn" onclick="addSubcategory('loss-subcategories', 'LOSS', 'assets')">Add Subcategory</button>
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">LOSS Total</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="assets[LOSS Total][amount]" required readonly>
+                    </div>
+                </div>
+
+                <!-- Working Capital -->
+                <div class="row mandatory-row mb-2">
+                    <div class="col-4">
+                        <label class="form-label">WORKING CAPITAL</label>
+                    </div>
+                    <div class="col-4">
+                        <input type="number" class="form-control" name="assets[WORKING CAPITAL][amount]" required readonly>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success mt-4">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function addSubcategory(containerId, category, side) {
+            const container = document.getElementById(containerId);
+            const newRow = document.createElement('div');
+            newRow.className = 'row subcategory-row mb-2';
+            newRow.innerHTML = `
+                <div class="col-4">
+                    <input type="text" class="form-control" name="${side}[${category}][subcategories][][name]" placeholder="Subcategory" required>
+                </div>
+                <div class="col-2">
+                    <input type="number" class="form-control" name="${side}[${category}][subcategories][][no_of_accounts]" placeholder="No of A/C">
+                </div>
+                <div class="col-2">
+                    <input type="number" class="form-control" name="${side}[${category}][subcategories][][amount]" placeholder="Amount (Rs)" oninput="updateTotal('${category}', '${side}')">
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-danger remove-btn" onclick="removeSubcategory(this, '${category}', '${side}')">Remove</button>
+                </div>
+            `;
+            container.appendChild(newRow);
+        }
+
+        function removeSubcategory(button, category, side) {
+            const row = button.parentElement.parentElement;
+            row.remove();
+            updateTotal(category, side);
+        }
+
+        function updateTotal(category, side) {
+            const subcategories = document.querySelectorAll(`input[name="${side}[${category}][subcategories][][amount]"]`);
+            let total = 0;
+            let totalAccounts = 0;
+            subcategories.forEach(input => {
+                const value = parseFloat(input.value) || 0;
+                total += value;
+            });
+            const noOfAccountsInputs = document.querySelectorAll(`input[name="${side}[${category}][subcategories][][no_of_accounts]"]`);
+            noOfAccountsInputs.forEach(input => {
+                const value = parseInt(input.value) || 0;
+                totalAccounts += value;
+            });
+            const totalInput = document.querySelector(`input[name="${side}[${category} Total][amount]"]`);
+            if (totalInput) totalInput.value = total.toFixed(2);
+            const totalAccountsInput = document.querySelector(`input[name="${side}[${category} Total][no_of_accounts]"]`);
+            if (totalAccountsInput) totalAccountsInput.value = totalAccounts;
+
+            updateWorkingCapital();
+        }
+
+        function updateWorkingCapital() {
+            let liabilitiesTotal = 0;
+            let assetsTotal = 0;
+            document.querySelectorAll('input[name$="[amount]"]').forEach(input => {
+                const name = input.name;
+                const value = parseFloat(input.value) || 0;
+                if (name.includes('liabilities') && name.includes('Total') && !name.includes('WORKING CAPITAL')) {
+                    liabilitiesTotal += value;
+                } else if (name.includes('assets') && name.includes('Total') && !name.includes('WORKING CAPITAL')) {
+                    assetsTotal += value;
+                }
+            });
+            const liabilitiesWorkingCapital = document.querySelector('input[name="liabilities[WORKING CAPITAL][amount]"]');
+            const assetsWorkingCapital = document.querySelector('input[name="assets[WORKING CAPITAL][amount]"]');
+            if (liabilitiesWorkingCapital) liabilitiesWorkingCapital.value = liabilitiesTotal.toFixed(2);
+            if (assetsWorkingCapital) assetsWorkingCapital.value = assetsTotal.toFixed(2);
+        }
+
+        document.querySelectorAll('input[name$="[amount]"]').forEach(input => {
+            input.addEventListener('input', () => {
+                const name = input.name;
+                const categoryMatch = name.match(/\[(.*?)\]/);
+                if (categoryMatch) {
+                    const category = categoryMatch[1];
+                    const side = name.includes('liabilities') ? 'liabilities' : 'assets';
+                    if (!name.includes('Total') && !name.includes('WORKING CAPITAL')) {
+                        updateTotal(category, side);
+                    }
+                }
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
